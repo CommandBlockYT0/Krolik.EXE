@@ -124,20 +124,10 @@ namespace Krolik.exe
 
         private void Music_Tick(object sender, EventArgs e)
         {
-            player.Play();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            if (state1 == true)
-            {
-                player.Stop();
-
-            } else
-            {
-                player.PlayLooping();
-            }
-            state1 = !state1;
         }
 
         private void toolStripButton8_Click(object sender, EventArgs e)

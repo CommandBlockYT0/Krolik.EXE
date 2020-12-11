@@ -60,7 +60,6 @@
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.bindingSource1 = new System.Windows.Forms.BindingSource(this.components);
             this.Music = new System.Windows.Forms.Timer(this.components);
-            this.button3 = new System.Windows.Forms.Button();
             this.toolStrip1.SuspendLayout();
             this.toolStrip2.SuspendLayout();
             this.toolStrip3.SuspendLayout();
@@ -358,17 +357,6 @@
             this.Music.Interval = 114000;
             this.Music.Tick += new System.EventHandler(this.Music_Tick);
             // 
-            // button3
-            // 
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button3.Location = new System.Drawing.Point(74, 235);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(52, 48);
-            this.button3.TabIndex = 11;
-            this.button3.Text = "| |";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
-            // 
             // Form1
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -376,7 +364,6 @@
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(1364, 724);
-            this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.toolStrip7);
@@ -389,6 +376,7 @@
             this.Controls.Add(this.toolStrip1);
             this.DoubleBuffered = true;
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximumSize = new System.Drawing.Size(1920, 1080);
             this.MinimumSize = new System.Drawing.Size(1364, 724);
             this.Name = "Form1";
@@ -445,7 +433,6 @@
         private System.Windows.Forms.ToolStripLabel totalRabbitsInSelectedHole;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Timer Music;
-        private System.Windows.Forms.Button button3;
     }
 }
 
