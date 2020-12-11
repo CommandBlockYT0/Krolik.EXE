@@ -8,27 +8,27 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Media;
+using System.Collections;
 
 namespace Krolik.exe
 {
     public partial class Form1 : Form
     {
-        int krol = 0;
         int selforviv = 1;
         int selforwrt = 1;
         bool state1=true;
-        int[,,] mass = new int[5, 5, 5];
-        int[,,] endmass = new int[5, 5, 5];
-        bool[,] config = new bool[5, 5];
-        int[] perenoska_dlya_koshek = new int[5];
         SoundPlayer player = new SoundPlayer("STALKERtheme.wav");
+        List<Hole> holes = new List<Hole>(5);
         public Form1()
         {
             InitializeComponent();
             player.PlayLooping();
             button2.Left = 387;
             button2.Top = 255;
-
+            for (int i = 0; i < 5; i++)
+            {
+                holes.Add(new Hole());
+            }
         }
 
         private void toolStripButton1_Click(object sender, EventArgs e)
@@ -45,26 +45,27 @@ namespace Krolik.exe
         {
             this.WindowState = FormWindowState.Minimized;
         }
-
+        Rabbit.RabbitColor futureRabbitColor;
+        bool futureRabbitHasTooManyPaws;
         private void toolStripButton1_Click_1(object sender, EventArgs e)
         {
-            mass[0, selforviv - 1, 0] = 1;//белый
+            futureRabbitColor = Rabbit.RabbitColor.Белый;
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            mass[0, selforviv - 1, 0] = 2;//серый
+            futureRabbitColor = Rabbit.RabbitColor.Серый;
         }
 
         private void toolStripButton3_Click(object sender, EventArgs e)
         {
-            mass[0, selforviv-1, 0] = 3;//бежевый
+            futureRabbitColor = Rabbit.RabbitColor.Бежевый;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            toolStripLabel4.Text = "Нора " + selforviv;
-            toolStripLabel5.Text = "Выбранно для вывода: Нора " + selforwrt;
+            selectedToWriteLabel.Text = "Нора " + selforwrt;
+            selectedToDisplayLabel.Text = "Выбранно для вывода: Нора " + selforviv;
             if (selforviv < 1)
             {
                 selforviv = 1;
@@ -83,43 +84,35 @@ namespace Krolik.exe
                 selforwrt = 5;
             }
 
+            holeDataTextArea.Text = "";
+            totalRabbitsInSelectedHole.Text = $"Кроликов уже: {holes[selforviv - 1].Rabbits.Count}/5";
+            int i = 0;
+            foreach (var item in holes[selforviv - 1].Rabbits)
+            {
+                i++;
+                holeDataTextArea.Text += $"Кролик {i} {item}\r\n";
+            }
+
         }
 
         private void toolStripButton6_Click(object sender, EventArgs e)
         {
-            if (config[krol + 1, selforwrt + 1] == true)
-            {
-                selforviv++;
-            } else
-            {
-                krol = perenoska_dlya_koshek[selforwrt++];
-            }
+            selforwrt++;
         }
 
         private void toolStripButton7_Click(object sender, EventArgs e)
         {
-            if (config[krol-1, selforwrt-1] == true)
-            {
-                selforviv--;
-            } else
-            {
-                krol = perenoska_dlya_koshek[selforwrt--];
-            }
+            selforwrt--;
         }
 
         private void toolStripButton9_Click(object sender, EventArgs e)
         {
-            selforwrt++;
+            selforviv++;
         }
 
         private void toolStripButton10_Click(object sender, EventArgs e)
         {
-            selforwrt--;
-        }
-
-        private void toolStripButton12_Click(object sender, EventArgs e)
-        {
-            mass[1, selforviv - 1, 0] = Convert.ToInt32(toolStripTextBox1.Text);
+            selforviv--;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -147,73 +140,89 @@ namespace Krolik.exe
 
         private void toolStripButton8_Click(object sender, EventArgs e)
         {
-            config[krol, selforwrt] = true;
-            endmass[0, selforviv - 1, 0] = mass[0, selforviv - 1, 0];
-            endmass[1, selforviv - 1, 0] = mass[1, selforviv - 1, 0];
-            endmass[2, selforviv - 1, 0] = mass[2, selforviv - 1, 0];
-            if (krol >= 4)
+            if (int.TryParse(earsCountTextBox.Text, out int ears))
             {
-                textBox1.Text = "Нора переполнена. Выберите следующую нору!";
+                System.Diagnostics.Debug.WriteLine("Created");
+                holes[selforwrt - 1].AddRabbit(new Rabbit(futureRabbitColor, ears, futureRabbitHasTooManyPaws));
             }
-            else
-            {
-                krol++;
-            }
-            if (endmass[0, selforviv - 1, 0] == 1)
-            {
-                textBox1.Text = "Нора " + selforwrt + ", Кролик " + krol + "\r\n    - Белый" + "\r\n    - Кол-во ушей " + endmass[1, selforviv - 1, 0] + "\r\n    - Лишние лапки " + endmass[2, selforviv - 1, 0] + " | 1 - есть, 0 - нет";
-            }
-            else if (endmass[0, selforviv - 1, 0] == 2)
-            {
-                textBox1.Text = "Нора " + selforwrt + ", Кролик " + krol + "\r\n    - Серый" + "\r\n    - Кол-во ушей " + endmass[1, selforviv - 1, 0] + "\r\n    - Лишние лапки " + endmass[2, selforviv - 1, 0] + " | 1 - есть, 0 - нет";
-            }
-            else if (endmass[0, selforviv - 1, 0] == 3)
-            {
-                textBox1.Text = "Нора " + selforwrt + ", Кролик " + krol + "\r\n    - Бежевый" + "\r\n    - Кол-во ушей " + endmass[1, selforviv - 1, 0] + "\r\n    - Лишние лапки " + endmass[2, selforviv - 1, 0] + " | 1 - есть, 0 - нет";
-            }
-            else
-            {
-
-            }
-            toolStripLabel7.Text = "Кроликов уже:" + (krol) + "/5";
-            perenoska_dlya_koshek[selforwrt] = krol;
-
         }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
-            mass[2, 0, 0] = 1;
+            futureRabbitHasTooManyPaws = true;
         }
 
         private void toolStripButton5_Click(object sender, EventArgs e)
         {
-            mass[2, 0, 0] = 0;
+            futureRabbitHasTooManyPaws = false;
         }
 
         private void toolStripButton11_Click(object sender, EventArgs e)
         {
-            if (config[krol, selforwrt] == true)
+        }
+    }
+
+    public class Hole
+    {
+        List<Rabbit> rabbits = new List<Rabbit>();
+        public bool ReachedMax
+        {
+            get
             {
-                if (endmass[0, 0, 0] == 1)
-                {
-                    textBox1.Text = "Нора " + (selforwrt - 1) + ", Кролик " + krol + "\r\n    - Белый" + "\r\n    - Кол-во ушей " + endmass[1, selforwrt - 1, 0] + "\r\n    - Лишние лапки " + endmass[2, selforwrt - 1, 0] + " | 1 - есть, 0 - нет";
-                }
-                else if (endmass[0, 0, 0] == 1)
-                {
-                    textBox1.Text = "Нора " + (selforwrt - 1) + ", Кролик " + krol + "\r\n    - Серый" + "\r\n    - Кол-во ушей " + endmass[1, selforwrt - 1, 0] + "\r\n    - Лишние лапки " + endmass[2, selforwrt - 1, 0] + " | 1 - есть, 0 - нет";
-                }
-                else if (endmass[0, 0, 0] == 1)
-                {
-                    textBox1.Text = "Нора " + (selforwrt - 1) + ", Кролик " + krol + "\r\n    - Бежевый" + "\r\n    - Кол-во ушей " + endmass[1, selforwrt - 1, 0] + "\r\n    - Лишние лапки " + endmass[2, selforwrt - 1, 0] + " | 1 - есть, 0 - нет";
-                }
-                else
-                {
-                    krol++;
-                }
-            } else
-            {
-                textBox1.Text = "Нора " + selforwrt + ", Кролик " + krol + "\r\nЭта нора ещё не сконфигурирована!";
+                return rabbits.Count >= 5;
             }
+        }
+        public Rabbit this[int index]
+        {
+            get
+            {
+                return rabbits[index];
+            }
+            set
+            {
+                rabbits[index] = value;
+            }
+        }
+        public List<Rabbit> Rabbits
+        {
+            get
+            {
+                return rabbits;
+            }
+        }
+        public void AddRabbit(Rabbit rabbit) { if (!ReachedMax) { rabbits.Add(rabbit); } }
+
+
+        public Hole(Rabbit rabbit) => AddRabbit(rabbit);
+        public Hole(List<Rabbit> rabbits)
+        {
+            foreach (var rabbit in rabbits) AddRabbit(rabbit);
+        }
+        public Hole() { }
+    }
+
+    public class Rabbit
+    {
+        public enum RabbitColor
+        {
+            Белый,
+            Серый,
+            Бежевый,
+        }
+
+        RabbitColor color;
+        int ears;
+        bool tooManyPaws;
+
+        public Rabbit(RabbitColor color, int ears, bool tooManyPaws)
+        {
+            this.color = color;
+            this.ears = ears;
+            this.tooManyPaws = tooManyPaws;
+        }
+        public override string ToString()
+        {
+            return $"Цвет: {color}\r\n\t- Кол-во ушей {ears}\r\n\t-{(tooManyPaws ? "Лишние лапки есть" : "Лишних лапок нет")} ";
         }
     }
 }
