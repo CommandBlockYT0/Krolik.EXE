@@ -17,12 +17,14 @@ namespace Krolik.exe
         int selforviv = 1;
         int selforwrt = 1;
         bool state1=true;
-        SoundPlayer player = new SoundPlayer("STALKERtheme.wav");
         List<Hole> holes = new List<Hole>(5);
         public Form1()
         {
+
             InitializeComponent();
-            player.PlayLooping();
+            System.IO.Stream str = Properties.Resources.STALKERtheme;
+            System.Media.SoundPlayer snd = new System.Media.SoundPlayer(str);
+            snd.Play();
             button2.Left = 387;
             button2.Top = 255;
             for (int i = 0; i < 5; i++)
